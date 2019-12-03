@@ -1,4 +1,5 @@
 import 'package:flash_chat/constants.dart';
+import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flash_chat/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,14 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   String uEmail,uPassword;
+
+  FirebaseAuth _auth;
+
+  @override
+  void initState() {
+    _auth=FirebaseAuth.instance;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +64,14 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(
               height: 24.0,
             ),
-            myButton(text: 'Log In',c:Colors.lightBlueAccent,onPress: (){
-              if(uEmail.length==0 || uPassword.length==0){
-                //print("yes");
-                //please enter email id / password
-              }
-              else{
-                //register user
+            myButton(text: 'Log In',c:Colors.lightBlueAccent,onPress: ()async{
+              try{
+              final user= await _auth.signInWithEmailAndPassword(email: uEmail, password: uPassword);
+              if(user!=null){
+                Navigator.pushNamed(context, ChatScreen.id);
+              }}
+              catch(e){
+                print(e);
               }
             },),
           ],
