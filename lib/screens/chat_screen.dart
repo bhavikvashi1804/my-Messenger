@@ -41,14 +41,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
 
-  void getMessages1()async {
-    await for (var  snapshot  in _fireStore.collection('messages').snapshots()){
-      for(var msg in snapshot.documents){
-        print(msg.data);
-      }
-    }
-    //snapshot handle automatically update
-  }
+
 
 
   @override
@@ -68,7 +61,6 @@ class _ChatScreenState extends State<ChatScreen> {
               onPressed: () {
                 _auth.signOut();
                 Navigator.pop(context);
-                getMessages1();
               }),
         ],
         title: Text('⚡️Chat'),
@@ -168,7 +160,7 @@ class MessageBubble extends StatelessWidget {
           Text(sender,style: TextStyle(fontSize: 12,color: Colors.black54),),
           Material(
             elevation: 5.0,
-            borderRadius: BorderRadius.circular(30.0),
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(30),bottomLeft: Radius.circular(30),bottomRight: Radius.circular(30)),
             color: Colors.lightBlueAccent,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0,vertical: 10.0),
