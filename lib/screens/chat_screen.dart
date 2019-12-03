@@ -3,6 +3,10 @@ import 'package:flash_chat/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
+
+final _fireStore=Firestore.instance;
+
 class ChatScreen extends StatefulWidget {
    static const String id="chat_screen";
   @override
@@ -11,7 +15,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
 
-  final _fireStore=Firestore.instance;
+
   final _auth=FirebaseAuth.instance;
   FirebaseUser logedInUser;
 
@@ -85,35 +89,7 @@ class _ChatScreenState extends State<ChatScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             
-            StreamBuilder<QuerySnapshot>(
-              stream: _fireStore.collection('messages').snapshots(),
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-
-                if (snapshot.hasError){
-                  return Text('Error: ${snapshot.error}');
-                }
-                if(snapshot.hasData){
-                  final msgs=snapshot.data.documents;
-                  List<Text> msgWidget=[];
-
-                  for(var msg in msgs){
-                    final msgText=msg.data['text'];
-                    final msgSender=msg.data['sender'];
-
-                    final oneMsgWidget=Text('$msgText from $msgSender',style: TextStyle(fontSize: 50.0),);
-                    msgWidget.add(oneMsgWidget);
-                  }
-
-                  return Expanded(
-                    child: ListView(
-                      padding: EdgeInsets.symmetric(horizontal: 10.0,vertical: 20.0),
-                      children: msgWidget,
-                    ),
-                  );
-                }
-                return Text('No data'); // unreachable
-              },
-            ),
+            MyMessages(),
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
@@ -148,3 +124,73 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
+
+
+class MyMessages extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: _fireStore.collection('messages').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+
+        if (snapshot.hasError){
+          return Text('Error: ${snapshot.error}');
+        }
+        if(snapshot.hasData){
+          final msgs=snapshot.data.documents;
+          List<MessageBubble> msgWidget=[];
+
+          for(var msg in msgs){
+            final msgText=msg.data['text'];
+            final msgSender=msg.data['sender'];
+
+            final oneMsgWidget=MessageBubble(msgSender,msgText);
+            msgWidget.add(oneMsgWidget);
+          }
+
+          return Expanded(
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 10.0,vertical: 20.0),
+              children: msgWidget,
+            ),
+          );
+        }
+        return Text('No data'); // unreachable
+      },
+    );
+  }
+}
+
+class MessageBubble extends StatelessWidget {
+  final String sender,msg;
+  MessageBubble(this.sender,this.msg);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          Text(sender,style: TextStyle(fontSize: 12,color: Colors.black54),),
+          Material(
+            elevation: 5.0,
+            borderRadius: BorderRadius.circular(30.0),
+            color: Colors.lightBlueAccent,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.0,vertical: 10.0),
+              child: Text(
+                msg,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
