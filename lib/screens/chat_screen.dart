@@ -33,6 +33,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   }
 
+
+  /*
   void getMessages()async {
     final messages = await _fireStore.collection('messages').getDocuments();
 
@@ -40,6 +42,19 @@ class _ChatScreenState extends State<ChatScreen> {
       print(msg.data);
     }
   }
+
+   */
+
+
+  void getMessages1()async {
+    await for (var  snapshot  in _fireStore.collection('messages').snapshots()){
+      for(var msg in snapshot.documents){
+        print(msg.data);
+      }
+    }
+    //snapshot handle automatically update
+  }
+
 
   @override
   void initState() {
@@ -58,6 +73,7 @@ class _ChatScreenState extends State<ChatScreen> {
               onPressed: () {
                 _auth.signOut();
                 Navigator.pop(context);
+                getMessages1();
               }),
         ],
         title: Text('⚡️Chat'),
