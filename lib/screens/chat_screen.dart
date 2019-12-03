@@ -100,12 +100,15 @@ class _ChatScreenState extends State<ChatScreen> {
                     final msgText=msg.data['text'];
                     final msgSender=msg.data['sender'];
 
-                    final oneMsgWidget=Text('$msgText from $msgSender');
+                    final oneMsgWidget=Text('$msgText from $msgSender',style: TextStyle(fontSize: 50.0),);
                     msgWidget.add(oneMsgWidget);
                   }
 
-                  return Column(
-                    children: msgWidget,
+                  return Expanded(
+                    child: ListView(
+                      padding: EdgeInsets.symmetric(horizontal: 10.0,vertical: 20.0),
+                      children: msgWidget,
+                    ),
                   );
                 }
                 return Text('No data'); // unreachable
