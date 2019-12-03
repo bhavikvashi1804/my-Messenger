@@ -1,0 +1,7 @@
+#Tue Dec 03 10:33:07 IST 2019
+base.0=D\:\\Android\\AS_Projects\\my_messenger\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
+path.1=classes2.dex
+renamed.1=classes2.dex
+path.0=classes.dex
+renamed.0=classes.dex
+base.1=D\:\\Android\\AS_Projects\\my_messenger\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
