@@ -123,7 +123,7 @@ class MyMessages extends StatelessWidget {
           return Text('Error: ${snapshot.error}');
         }
         if(snapshot.hasData){
-          final msgs=snapshot.data.documents;
+          final msgs=snapshot.data.documents.reversed;
           List<MessageBubble> msgWidget=[];
 
           for(var msg in msgs){
@@ -146,6 +146,7 @@ class MyMessages extends StatelessWidget {
             child: ListView(
               padding: EdgeInsets.symmetric(horizontal: 10.0,vertical: 20.0),
               children: msgWidget,
+              reverse: true,
             ),
           );
         }
