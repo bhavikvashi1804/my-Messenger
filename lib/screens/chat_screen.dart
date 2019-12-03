@@ -21,7 +21,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
 
   String messageText='';
+  final msgTextController=TextEditingController;
 
+
+  final myController = TextEditingController();
 
   void getCurrentUser()async{
     try{
@@ -36,18 +39,6 @@ class _ChatScreenState extends State<ChatScreen> {
     }
 
   }
-
-
-  /*
-  void getMessages()async {
-    final messages = await _fireStore.collection('messages').getDocuments();
-
-    for(var msg in messages.documents){
-      print(msg.data);
-    }
-  }
-
-   */
 
 
   void getMessages1()async {
@@ -97,6 +88,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
+                      controller: myController,
                       onChanged: (value) {
                         messageText=value;
                       },
@@ -105,6 +97,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   FlatButton(
                     onPressed: () {
+                      myController.clear();
                       _fireStore.collection('messages').add({
                         'text': messageText,
                         'sender': logedInUser.email,
